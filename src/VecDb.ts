@@ -39,7 +39,7 @@ export class VecDb {
    * @param {"stream".internal.Readable} input the wordvec dump file
    * @returns {Promise<void>}
    */
-  async ingestDb(input: Readable) : Promise<void> {
+  async ingestDb(input: Readable, vectorStream: Writable | null | undefined) : Promise<void> {
     let i = 0;
     for await (const line of asyncIterateStream(byline(input), false)) {
       let vec = line.toString().split(/\s+/);
@@ -47,6 +47,7 @@ export class VecDb {
       let wordvec = _.map(vec.slice(1), (n:string)=>{if (n=='.') return 0; else return parseFloat(n);});
       await this.keyValDb.put(word, JSON.stringify(wordvec));
       await this.keyValDb.put(dbkeyOfI(i), word);
+      if (vectorStream) vectorStream.write(wordvec.join(' '));
       i++;
     }
   }

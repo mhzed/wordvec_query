@@ -5,7 +5,7 @@
   "main": "index.js",
   "scripts": {
     "test": "nodeunit test/",
-    "index": "ts-node index.ts",
+    "index": "ts-node src/vecIndex.ts",
     "split": "ts-node src/vecsplit.ts "
   },
   "keywords": [],
