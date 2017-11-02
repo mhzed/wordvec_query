@@ -5,8 +5,12 @@
   "main": "index.js",
   "scripts": {
     "test": "nodeunit test/",
-    "index": "ts-node src/vecIndex.ts",
-    "split": "ts-node src/vecsplit.ts "
+    "index": "ts-node src/index.ts",
+
+    "server-nsm": "ts-node src/server.ts -p 9999 --nms localhost:10000 --data ../extern/glove.6B",
+    "server-annoy": "ts-node src/server.ts -p 9999 -a glove.6B.300d.txt.300.angular.50.annoy --data ../extern/glove.6B/",
+    
+    "client-test": "ts-node src/client.ts --server localhost:9999"
   },
   "keywords": [],
   "author": "",
@@ -24,6 +28,7 @@
     "typescript": "^2.5.3"
   },
   "dependencies": {
+    "annoy": "^1.0.10",
     "async-iterate-stream": "^1.0.2",
     "byline": "^5.0.0",
     "leveldown": "^2.0.0",
@@ -31,6 +36,7 @@
     "lodash": "^4.17.4",
     "pmfy": "^1.0.3",
     "thrift": "^0.10.0",
-    "yargs": "^10.0.3"
+    "yargs": "^10.0.3",
+    "zerorpc": "^0.9.7"
   }
 }
