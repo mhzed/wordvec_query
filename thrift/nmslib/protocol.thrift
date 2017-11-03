@@ -1,4 +1,4 @@
-namespace java edu.cmu.lti.oaqa.similarity
+//namespace java edu.cmu.lti.oaqa.similarity
 namespace cpp similarity
 
 struct ReplyEntry {

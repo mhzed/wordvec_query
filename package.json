@@ -6,16 +6,15 @@
   "scripts": {
     "test": "nodeunit test/",
     "index": "ts-node src/index.ts",
-
-    "server-nsm": "ts-node src/server.ts -p 9999 --nms localhost:10000 --data ../extern/glove.6B",
+    "server-nms": "ts-node src/server.ts -p 9999 --nms localhost:10000 --data ../extern/glove.6B",
     "server-annoy": "ts-node src/server.ts -p 9999 -a glove.6B.300d.txt.300.angular.50.annoy --data ../extern/glove.6B/",
-    
     "client-test": "ts-node src/client.ts --server localhost:9999"
   },
   "keywords": [],
   "author": "",
   "license": "ISC",
   "devDependencies": {
+    "@creditkarma/thrift-typescript": "0.0.15",
     "@types/lodash": "^4.14.80",
     "@types/node": "^8.0.47",
     "@types/nodeunit": "0.0.30",

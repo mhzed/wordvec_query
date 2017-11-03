@@ -1,47 +1,43 @@
 import * as thrift from "thrift";
-import * as WordvecQueryService from "../protocol/gen-nodejs/WordvecQueryService";
+import {WordvecQueryService, WordEntry} from "../thrift/vecquery";
 import {VecDb} from "./VecDb";
 import * as _ from "lodash";
 
 /**
  * Wrapper around thrift server, implements protocol
  */
-export class WordvecQueryServiceServer {
+export class WordvecQueryServiceServer implements WordvecQueryService.IHandler<void> {
+  
   private thriftServer;
   private vecDb : VecDb;
   
   constructor(vecDb: VecDb) {
     this.vecDb = vecDb;
-    
-    this.thriftServer = thrift.createServer(WordvecQueryService as any, {
-      knnQuery : (k: number, word: string, resultcb: (err, result?)=>void )=>{
-        this.knnQuery(k, word).catch((err)=>resultcb(err)).then((ret)=>resultcb(null, ret));
-      },
-
-      findVec: (word: string, resultcb: (err, result?)=>void) => {
-        this.vecDb.findVec(word).catch(resultcb).then((vector)=>resultcb(null, {
-          word,
-          dist: 0,
-          vector 
-        }));
-      }
-    });
-    
+    this.thriftServer = thrift.createServer(WordvecQueryService.Processor, this);
   }
   
   listen(port: number) {
     this.thriftServer.listen(port);
   }
-  
-  async knnQuery(k: number, word: string) : Promise<Array<{word: string, dist: number, vector: number[]}>> {
+
+  async findVec(word: string) : Promise<WordEntry> {
+    const vec = await this.vecDb.findVec(word);
+    return new WordEntry({
+      word,
+      dist: 0,
+      vector : vec
+    });
+  }
+
+  async knnQuery(k: number, word: string) : Promise<WordEntry[]> {
     const vecs = await this.vecDb.findNearestVectors(word, k);
-    let ret: { word: string, dist: number, vector: number[] }[] = [];
+    let ret: WordEntry[] = [];
     for (let i = 0; i < vecs.length; i++) {
-      ret.push({
+      ret.push(new WordEntry({
         dist: vecs[i].dist,
         word: vecs[i].word,
         vector: []
-      });
+      }));
     }
     return ret;
   }

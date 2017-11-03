@@ -1,4 +1,4 @@
-import {VecSimilarity, VecSimilarityEntry} from "./VecSimilarity";
+import {VecNeighbors, VecNeighborEntry} from "./VecNeighbors";
 import * as _ from 'lodash';
 import * as fs from "fs";
 import {Readable} from "stream";
@@ -13,7 +13,7 @@ export interface AnnoyIndexProperty {
   ntrees: number
 }
 
-export class AnnoySimilarity implements VecSimilarity {
+export class AnnoyNeighbors implements VecNeighbors {
   private index;
   private search_k = 10000;
   public property : AnnoyIndexProperty = { 
@@ -29,8 +29,8 @@ export class AnnoySimilarity implements VecSimilarity {
     let p = this.property;
     this.index.save(`${base}.${p.dimension}.${p.method}.${p.ntrees}.annoy`);
   }
-  public static loadAs(indexFile: string) :AnnoySimilarity {
-    let ret = new AnnoySimilarity();
+  public static loadAs(indexFile: string) :AnnoyNeighbors {
+    let ret = new AnnoyNeighbors();
     let [base, dimension, method, ntrees] = (/.(\w+).(\w+).(\w+).annoy/i).exec(indexFile);
     ret.property = {dimension : parseInt(dimension), method, ntrees: parseInt(ntrees)};
     ret.index = new Annoy(ret.property.dimension, ret.property.method);
@@ -44,8 +44,8 @@ export class AnnoySimilarity implements VecSimilarity {
    * @param {"stream".internal.Readable} vecStream one per per vec, vec is space deliminated
    * @returns {Promise<AnnoySimilarity>}
    */
-  public static async buildIndexFromVector(vecStream: Readable, prop?: AnnoyIndexProperty) : Promise<AnnoySimilarity> {
-    let ret = new AnnoySimilarity();
+  public static async buildIndexFromVector(vecStream: Readable, prop?: AnnoyIndexProperty) : Promise<AnnoyNeighbors> {
+    let ret = new AnnoyNeighbors();
     // read vecfile
     let i = 0;
     ret.property = _.assign(ret.property, prop);
@@ -63,16 +63,16 @@ export class AnnoySimilarity implements VecSimilarity {
   }
 
   // load index
-  public static loadIndex(indexFile: string, prop: AnnoyIndexProperty) :AnnoySimilarity {
-    let ret = new AnnoySimilarity();
+  public static loadIndex(indexFile: string, prop: AnnoyIndexProperty) :AnnoyNeighbors {
+    let ret = new AnnoyNeighbors();
     ret.property = prop;
     ret.index = new Annoy(ret.property.dimension, ret.property.method);
     ret.index.load(indexFile);
     return ret;
   }
   
-  async knn(vector: number[], k: number) : Promise<VecSimilarityEntry[]> {
-    let ret : VecSimilarityEntry[] = [];    
+  async knn(vector: number[], k: number) : Promise<VecNeighborEntry[]> {
+    let ret : VecNeighborEntry[] = [];    
     let {neighbors, distances} = this.index.getNNsByVector(vector, k, this.search_k, true);
     for (let i=0; i<neighbors.length; i++) {
       let id = neighbors[i];

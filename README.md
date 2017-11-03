@@ -1,11 +1,12 @@
 wordvec_query
 --------
 
-The wordvec query service.
+Provides interface (apache thrift) for wordvec lookup and find nearest neighbors.
 
-The nmslib doesn't work.
+The nmslib relies on the nmslib docker container, but the results seem all wrong, and 
+the indexing speed is unbearably slow.
 
-The annoy version works.
+The annoy version works well.
 
 ## index/server
 

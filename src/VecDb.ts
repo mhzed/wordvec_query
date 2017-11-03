@@ -3,7 +3,7 @@ import * as fs from 'fs';
 import {Readable, Writable} from 'stream';
 import * as byline from 'byline';
 import * as _ from 'lodash';
-import {VecSimilarity, VecSimilarityEntry} from "./VecSimilarity";
+import {VecNeighbors, VecNeighborEntry} from "./VecNeighbors";
 
 const dbkeyOfI = (i: number)=>{
   return `[${i}]`;
@@ -21,16 +21,16 @@ export interface VecEntry {
 export class VecDb {
   
   private keyValDb: any;
-  private similarity: VecSimilarity;
+  private neighbor: VecNeighbors;
 
   /**
    * 
    * @param keyValDb  the level db instance
    * @param {VecSimilarity} similarityInterface for vector similarity lookup
    */
-  constructor(keyValDb, similarityInterface: VecSimilarity) {
+  constructor(keyValDb, similarityInterface: VecNeighbors) {
     this.keyValDb = keyValDb;
-    this.similarity = similarityInterface;
+    this.neighbor = similarityInterface;
   }
 
   /**
@@ -80,7 +80,7 @@ export class VecDb {
    */
   async findNearestVectors(word: string, k: number) : Promise<Array<VecEntry>>{
     const vec : number[] = await this.findVec(word);
-    const neighborVecs : VecSimilarityEntry[] = await this.similarity.knn(vec, k);
+    const neighborVecs : VecNeighborEntry[] = await this.neighbor.knn(vec, k);
     const neighborWords : string[] = await Promise.all(_.map(neighborVecs, (v) => this.findWord(v.id)));
     const neighborWordvecs = await Promise.all(_.map(neighborWords, (w) => this.findVec(w)));
     

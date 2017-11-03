@@ -1,11 +1,12 @@
-import {VecSimilarity, VecSimilarityEntry} from "./VecSimilarity";
+import {VecNeighbors, VecNeighborEntry} from "./VecNeighbors";
 import * as thrift from "thrift";
-import * as QueryService from "../nmslib-thrift/QueryService";
+//import * as QueryService from "../nmslib-thrift/QueryService";//
+import {QueryService, ReplyEntry} from "../thrift/nmslib/protocol";
 import * as _ from 'lodash';
 
-export class NsmSimilarity implements VecSimilarity {
+export class NsmNeighbors implements VecNeighbors {
 
-  private nmsClient : any;
+  private nmsClient : QueryService.Client;
   
   constructor(nmsHost: string, nmsPort: number) {
     const conn = thrift.createConnection(nmsHost, nmsPort, {
@@ -19,11 +20,11 @@ export class NsmSimilarity implements VecSimilarity {
   };
 
   
-  async knn(vector: number[], k: number) : Promise<VecSimilarityEntry[]> {
+  async knn(vector: number[], k: number) : Promise<VecNeighborEntry[]> {
     let query = vector.join(' ');
     let response = await this.nmsClient.knnQuery(k, query, true, true);
     //console.log('vec: ' + query);
-    let ret : VecSimilarityEntry[] = _.map(response, (o:any)=>{
+    let ret : VecNeighborEntry[] = _.map(response, (o: ReplyEntry)=>{
       return {
         id: o.id,
         dist: o.dist

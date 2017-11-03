@@ -3,8 +3,8 @@ import * as path from 'path';
 import * as fs from 'fs';
 import * as _ from 'lodash';
 import {VecDb} from "./VecDb";
-import {NsmSimilarity} from "./NsmSimilarity";
-import {AnnoySimilarity} from "./AnnoySimilarity";
+import {NsmNeighbors} from "./NsmNeighbors";
+import {AnnoyNeighbors} from "./AnnoyNeighbors";
 import {WordvecQueryServiceServer} from "./WordvecQueryServiceServer";
 import * as levelup from "levelup";
 import leveldown from "leveldown";
@@ -37,7 +37,7 @@ import leveldown from "leveldown";
   let vecDb;
   if (argv.nms) {
     let [host, port] = argv.nms.split(':');
-    let nmsClient = new NsmSimilarity(host, parseInt(port));
+    let nmsClient = new NsmNeighbors(host, parseInt(port));
     vecDb = new VecDb(leveldb, nmsClient);
   } else if (argv.annoy) {
     let match = _.find(fs.readdirSync(argv.data), (name:string) => {
@@ -49,7 +49,7 @@ import leveldown from "leveldown";
     if (!match) throw new Error(`Unable to determine annoy index file`);
     console.log("Using index file " + match);
     let indexFile = path.resolve(argv.data, match);
-    let annoyDb = AnnoySimilarity.loadAs(indexFile);
+    let annoyDb = AnnoyNeighbors.loadAs(indexFile);
     annoyDb.setSearchK(argv.searchk);
     vecDb = new VecDb(leveldb, annoyDb);
   } else {

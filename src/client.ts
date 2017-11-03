@@ -1,7 +1,6 @@
 
 import * as thrift from "thrift";
-import * as WordvecQueryService from "../protocol/gen-nodejs/WordvecQueryService";
-import {WordvecQueryServiceClient} from "./WordvecQueryServiceClient";
+import {createWordvecQueryServiceClient} from "./createWordvecQueryServiceClient";
 import * as yargs from "yargs";
 
 (async function main() {
@@ -20,7 +19,7 @@ import * as yargs from "yargs";
   const argv = args.argv;
   
   const [host, port ] = argv.server.split(':');
-  let client = new WordvecQueryServiceClient(host, parseInt(port));
+  let client = createWordvecQueryServiceClient(host, parseInt(port));
   let word = argv._[0];
   
   //console.log(await client.findVec(word));
