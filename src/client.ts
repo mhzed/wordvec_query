@@ -1,6 +1,6 @@
 
-import * as thrift from "thrift";
-import {createWordvecQueryServiceClient} from "./createWordvecQueryServiceClient";
+import * as _ from 'lodash';
+import {WordvecQueryServiceFactory} from "./WordvecQueryServiceFactory";
 import * as yargs from "yargs";
 
 (async function main() {
@@ -8,7 +8,7 @@ import * as yargs from "yargs";
   const args = yargs.usage(`Usage: $0 --server host:port word`)
       .option('server', {
         alias: 's',
-        describe: 'host:port'
+        describe: '[http://]host:port[/path], without http:// then thrift connection is used'
       })
       .option('k', {
         describe: 'how many neighbors to find',
@@ -17,9 +17,14 @@ import * as yargs from "yargs";
       .demandOption(['server'])
       .demandCommand(1);
   const argv = args.argv;
-  
-  const [host, port ] = argv.server.split(':');
-  let client = createWordvecQueryServiceClient(host, parseInt(port));
+
+  let client;
+  if (_.includes(argv.server, '://')) {
+    client = WordvecQueryServiceFactory.createHttpClient(argv.server);
+  } else {
+    const [host, port] = argv.server.split(':');
+    client = WordvecQueryServiceFactory.createClient(host, parseInt(port));
+  }
   let word = argv._[0];
   
   //console.log(await client.findVec(word));

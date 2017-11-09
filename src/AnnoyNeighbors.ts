@@ -1,10 +1,8 @@
 import {VecNeighbors, VecNeighborEntry} from "./VecNeighbors";
 import * as _ from 'lodash';
-import * as fs from "fs";
 import {Readable} from "stream";
 import {asyncIterateStream} from "async-iterate-stream";
 import * as byline from 'byline';
-import {networkInterfaces} from "os";
 const Annoy = require("annoy");
 
 export interface AnnoyIndexProperty {
@@ -32,6 +30,7 @@ export class AnnoyNeighbors implements VecNeighbors {
   public static loadAs(indexFile: string) :AnnoyNeighbors {
     let ret = new AnnoyNeighbors();
     let [base, dimension, method, ntrees] = (/.(\w+).(\w+).(\w+).annoy/i).exec(indexFile);
+    base=undefined;
     ret.property = {dimension : parseInt(dimension), method, ntrees: parseInt(ntrees)};
     ret.index = new Annoy(ret.property.dimension, ret.property.method);
     ret.index.load(indexFile);

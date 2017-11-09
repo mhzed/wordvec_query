@@ -1,6 +1,5 @@
 import {asyncIterateStream} from "async-iterate-stream";
-import * as fs from 'fs';
-import {Readable, Writable} from 'stream';
+import {Readable} from 'stream';
 import * as byline from 'byline';
 import * as _ from 'lodash';
 import {VecNeighbors, VecNeighborEntry} from "./VecNeighbors";

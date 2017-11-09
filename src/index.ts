@@ -2,14 +2,10 @@ import * as yargs from "yargs";
 import * as path from 'path';
 import * as fs from 'fs';
 import * as fse from "fs-extra";
-import {Readable, Writable} from 'stream';
-import {asyncIterateStream} from "async-iterate-stream";
-import * as byline from 'byline';
-import * as _ from 'lodash';
 import {VecDb} from "./VecDb";
 import * as levelup from "levelup";
 import leveldown from "leveldown";
-import {AnnoySimilarity} from "./AnnoySimilarity";
+import {AnnoyNeighbors} from "./AnnoyNeighbors";
 
 /**
  * command line to take a wordvec dump and then:
@@ -88,7 +84,7 @@ is optimal.
       method: argv.method ? argv.method : "angular",
       ntrees: argv.trees ? parseInt(argv.trees) : 0
     }
-    let annoySim = await AnnoySimilarity.buildIndexFromVector(fs.createReadStream(vectorFile), property);
+    let annoySim = await AnnoyNeighbors.buildIndexFromVector(fs.createReadStream(vectorFile), property);
     annoySim.saveAs(pathToFile);
   }
 

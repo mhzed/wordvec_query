@@ -6,7 +6,11 @@
     "module": "commonjs",
     "typeRoots": ["node_modules/@types"],
     "inlineSourceMap" : true,
-    "allowJs" : true
+    "allowJs" : false,
+    "lib": [
+      "es6",
+      "esnext.asynciterable"
+    ]
     }
   }
   

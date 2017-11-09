@@ -7,14 +7,17 @@
     "test": "nodeunit test/",
     "index": "ts-node src/index.ts",
     "server-nms": "ts-node src/server.ts -p 9999 --nms localhost:10000 --data ../extern/glove.6B",
-    "server-annoy": "ts-node src/server.ts -p 9999 -a glove.6B.300d.txt.300.angular.50.annoy --data ../extern/glove.6B/",
-    "client-test": "ts-node src/client.ts --server localhost:9999"
+    "server": "ts-node src/server.ts -p 9999 -a glove.6B.300d.txt.300.angular.50.annoy --data ../extern/glove.6B/",
+    "client": "ts-node src/client.ts --server localhost:9999",
+    "httpserver":  "ts-node src/server.ts --express -p 9999 -a 50.annoy --data ../extern/glove.6B/ --static /vecsearch:../vecsearch/dist/",
+    "httpclient": "ts-node src/client.ts --server http://localhost:9999/thrift"
   },
   "keywords": [],
   "author": "",
   "license": "ISC",
   "devDependencies": {
     "@creditkarma/thrift-typescript": "0.0.15",
+    "@types/express": "^4.0.39",
     "@types/lodash": "^4.14.80",
     "@types/node": "^8.0.47",
     "@types/nodeunit": "0.0.30",
@@ -27,9 +30,11 @@
     "typescript": "^2.5.3"
   },
   "dependencies": {
+    "@creditkarma/thrift-server-express": "0.0.36",
     "annoy": "^1.0.10",
     "async-iterate-stream": "^1.0.2",
     "byline": "^5.0.0",
+    "express": "^4.16.2",
     "leveldown": "^2.0.0",
     "levelup": "^2.0.0",
     "lodash": "^4.17.4",

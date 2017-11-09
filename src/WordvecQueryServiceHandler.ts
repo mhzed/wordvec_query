@@ -1,24 +1,17 @@
-import * as thrift from "thrift";
 import {WordvecQueryService, WordEntry} from "../thrift/vecquery";
 import {VecDb} from "./VecDb";
-import * as _ from "lodash";
 
 /**
  * Wrapper around thrift server, implements protocol
  */
-export class WordvecQueryServiceServer implements WordvecQueryService.IHandler<void> {
-  
-  private thriftServer;
+export class WordvecQueryServiceHandler implements WordvecQueryService.IHandler<void> {
   private vecDb : VecDb;
   
   constructor(vecDb: VecDb) {
     this.vecDb = vecDb;
-    this.thriftServer = thrift.createServer(WordvecQueryService.Processor, this);
+
   }
   
-  listen(port: number) {
-    this.thriftServer.listen(port);
-  }
 
   async findVec(word: string) : Promise<WordEntry> {
     const vec = await this.vecDb.findVec(word);
