@@ -1,6 +1,7 @@
 import * as yargs from "yargs";
 import * as path from 'path';
 import * as fs from 'fs';
+import * as URL from 'url';
 import * as _ from 'lodash';
 import {VecDb} from "./VecDb";
 import {NsmNeighbors} from "./NsmNeighbors";
@@ -11,6 +12,8 @@ import * as express from 'express';
 import {bindToExpress} from "./bindToExpress";
 import * as levelup from "levelup";
 import leveldown from "leveldown";
+import * as proxy from 'express-http-proxy';
+
 
 export const loadVecDbUsignAnnoy = (dataDir: string, pattern: string) 
     : {vecdb: VecDb, indexFile: string, annoy: AnnoyNeighbors} => {
@@ -27,6 +30,19 @@ export const loadVecDbUsignAnnoy = (dataDir: string, pattern: string)
   };
 };
 
+const installXploreProxy = (app: any, hostport: string, thisport: string) : void => {
+  app.use('/', proxy(hostport, {
+    parseReqBody: false,
+    proxyReqPathResolver: (req)=> { // no change
+      return URL.parse(req.url).path;
+    },
+    userResDecorator: function(proxyRes, proxyResData, userReq, userRes) {
+      //  no change
+      return proxyResData;
+    }
+  }));
+};
+
 (async function main() {
   const args = yargs.usage(`Usage: $0 -p port --nms host:port --data ./dir`)
           .option('port', {
@@ -34,7 +50,12 @@ export const loadVecDbUsignAnnoy = (dataDir: string, pattern: string)
             describe: 'port to listen on'
           })
           .option('express', {
+            alias: 'e',
             describe: 'listen using express as http server, default is thrift server'
+          })
+          .option('proxyxplore', {
+            alias: 'x',
+            describe: 'setup proxy map to xplore at host:port'
           })
           .option ('nms', {
             describe: 'nms server host:port'
@@ -72,11 +93,21 @@ export const loadVecDbUsignAnnoy = (dataDir: string, pattern: string)
 
   if (argv.express) {
     const app = express();
-    if (argv.static) {
-      const [urlpath, filepath] = argv.static.split(':');
-      app.use(urlpath, express.static(path.resolve(filepath)));
-    }
+    // support CORS
+    app.use(function(req, res, next) {
+      res.header("Access-Control-Allow-Origin", "*");
+      res.header("Access-Control-Allow-Headers", "Origin, X-Requested-With, Content-Type, Accept");
+      if ('OPTIONS' == req.method) {
+        res.sendStatus(200);
+      }
+      else {
+        next();
+      }
+    });
     bindToExpress(app, '/thrift', vecDb);
+    if (argv.proxyxplore) {
+      installXploreProxy(app, argv.proxyxplore, argv.port);
+    }
     app.listen(parseInt(argv.port));
     console.log(`http server listening at http://localhost:${argv.port}/thrift ...`);
   } else {
@@ -88,5 +119,5 @@ export const loadVecDbUsignAnnoy = (dataDir: string, pattern: string)
   console.error(err);
   process.exit(1);
 }).then(()=>{
-}) 
+}); 
 

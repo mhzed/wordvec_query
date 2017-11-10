@@ -3,10 +3,8 @@ wordvec_query
 
 Provides interface (apache thrift) for wordvec lookup and find nearest neighbors.
 
-The nmslib relies on the nmslib docker container, but the results seem all wrong, and 
-the indexing speed is unbearably slow.
+Uses leveldb for word/vector lookup.  Uses annoy for nearest vector neighbours lookup.
 
-The annoy version works well.
 
 ## index/server
 

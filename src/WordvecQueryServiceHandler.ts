@@ -9,9 +9,7 @@ export class WordvecQueryServiceHandler implements WordvecQueryService.IHandler<
   
   constructor(vecDb: VecDb) {
     this.vecDb = vecDb;
-
   }
-  
 
   async findVec(word: string) : Promise<WordEntry> {
     const vec = await this.vecDb.findVec(word);
@@ -29,7 +27,7 @@ export class WordvecQueryServiceHandler implements WordvecQueryService.IHandler<
       ret.push(new WordEntry({
         dist: vecs[i].dist,
         word: vecs[i].word,
-        vector: []
+        vector: vecs[i].vector
       }));
     }
     return ret;

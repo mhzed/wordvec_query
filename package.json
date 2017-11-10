@@ -9,7 +9,7 @@
     "server-nms": "ts-node src/server.ts -p 9999 --nms localhost:10000 --data ../extern/glove.6B",
     "server": "ts-node src/server.ts -p 9999 -a glove.6B.300d.txt.300.angular.50.annoy --data ../extern/glove.6B/",
     "client": "ts-node src/client.ts --server localhost:9999",
-    "httpserver":  "ts-node src/server.ts --express -p 9999 -a 50.annoy --data ../extern/glove.6B/ --static /vecsearch:../vecsearch/dist/",
+    "httpserver": "ts-node src/server.ts -p 9999 -a 50.annoy --data ../extern/glove.6B/ -e -x localhost:9300",
     "httpclient": "ts-node src/client.ts --server http://localhost:9999/thrift"
   },
   "keywords": [],
@@ -35,6 +35,7 @@
     "async-iterate-stream": "^1.0.2",
     "byline": "^5.0.0",
     "express": "^4.16.2",
+    "express-http-proxy": "^1.0.7",
     "leveldown": "^2.0.0",
     "levelup": "^2.0.0",
     "lodash": "^4.17.4",
