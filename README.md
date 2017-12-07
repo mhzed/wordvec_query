@@ -30,13 +30,13 @@ Example:
 
     node src/server.js -p 9999 -e -a --data ../extern/glove.6B
     # the docker equivalent
-    docker run --rm -v /host/path/to/data:/data -p 9999:9999 mhzed/wordvecquery server -- -p 9999 -a --data /data
+    docker run --rm -v /host/path/to/data:/data -p 9999:9999 mhzed/wordvec_query server -- -p 9999 -a --data /data
 
 To query the server via command line:
 
     node src/client.js --server http://localhost:9999/thrift "wikipedia"
     # the docker version
-    docker run --rm mhzed/wordvecquery client -- --server http://docker.for.mac.localhost:9999/thrift "wikipedia"
+    docker run --rm mhzed/wordvec_query client -- --server http://docker.for.mac.localhost:9999/thrift "wikipedia"
 
 To query the server from whatever language you prefer, the protocol is defined in file ./thrift/vecquery.thrift.  Use Apache thrift
 to compile the protocol into the language choice you prefer.

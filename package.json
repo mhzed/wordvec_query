@@ -13,7 +13,7 @@
         "index": "node src/index.js -la -t 50",
         "server": "node src/server.js -e -a",
         "client": "node src/client.js",
-        "build-docker": "docker build -t mhzed/wordvecquery ."
+        "build-docker": "docker build -t mhzed/wordvec_query ."
     },
     "keywords": [],
     "author": "",
