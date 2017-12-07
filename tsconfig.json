@@ -1,16 +1,16 @@
-
-  {
-  "compilerOptions": {
-    "target": "es6",
-    "moduleResolution": "node",
-    "module": "commonjs",
-    "typeRoots": ["node_modules/@types"],
-    "inlineSourceMap" : true,
-    "allowJs" : false,
-    "lib": [
-      "es6",
-      "esnext.asynciterable"
-    ]
+{
+    "compilerOptions": {
+        "target": "es6",
+        "moduleResolution": "node",
+        "module": "commonjs",
+        "typeRoots": ["node_modules/@types"],
+        "inlineSourceMap": true,
+        "allowJs": false,
+        "watch": true,
+        "lib": [
+            "es6",
+            "dom",
+            "esnext.asynciterable"
+        ]
     }
-  }
-  
+}

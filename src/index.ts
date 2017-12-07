@@ -43,8 +43,7 @@ For annoy index creation time for 400k 300d vectors:
   - 90s when trees is 10
   - 200s when trees is 50
   - 640s when trees is 200
-Though annoy's doc says larger tree => more accurate result, experiment shows otherwise: for 400k vectors, size 50-100
-is optimal. 
+Though annoy's doc says larger tree => more accurate result, experiment shows otherwise: size 50-100 seems optimal for the case above. 
   
           `)
           .demandCommand(1)

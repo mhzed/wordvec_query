@@ -8,7 +8,7 @@ import * as yargs from "yargs";
   const args = yargs.usage(`Usage: $0 --server host:port word`)
       .option('server', {
         alias: 's',
-        describe: '[http://]host:port[/path], without http:// then thrift connection is used'
+        describe: '[http://]host:port[/path], without http:// then binary thrift connection is used'
       })
       .option('k', {
         describe: 'how many neighbors to find',
