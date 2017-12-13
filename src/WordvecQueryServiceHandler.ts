@@ -1,7 +1,8 @@
 import {WordvecQueryService, WordEntry} from "../thrift/vecquery";
 import {VecDb} from "./VecDb";
 import * as _ from "lodash"
-// import { wordExpressionParser } from "./wordExpression"
+import { parse } from "./wordExpression/wordExpression"
+import { instance } from "./wordExpression/findWordVec"
 
 /**
  * Wrapper around thrift server, implements protocol
@@ -18,8 +19,11 @@ const typeConvert = (vecs): WordEntry[] => {
 export class WordvecQueryServiceHandler implements WordvecQueryService.IHandler<void> {
   
   async knnQueryOnExpression(k: number, expression: string, context?: void): Promise<WordEntry[]> {
-    // wordExpressionParser(expression)
-    return []
+    if (expression.length > 512) throw new Error("Too long");
+    let vec = await parse(expression, {});
+    if (vec.tolist) vec = vec.tolist();
+    let words = await this.vecDb.findNearestVectorsOnVector(vec, k)
+    return typeConvert(words);
   }
   
   async knnQueryOnVector(k: number, vector: number[], context?: void): Promise<WordEntry[]> {
@@ -30,6 +34,9 @@ export class WordvecQueryServiceHandler implements WordvecQueryService.IHandler<
   
   constructor(vecDb: VecDb) {
     this.vecDb = vecDb;
+    instance.findVec = async(word: string): Promise<number[]> => {
+      return await vecDb.findVec(word);
+    }
   }
 
   async findVec(word: string) : Promise<WordEntry> {

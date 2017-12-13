@@ -9,6 +9,7 @@ instance.findVec = async (word: string): Promise<number[]> => {
   switch (word) {
     case 'word1': return [1,1,1];
     case 'word2': return [2,2,2];
+    case 'word3': return [3,3,3];
     default: throw new Error(word + " is not found");
   }  
 }
@@ -38,7 +39,7 @@ export const exp4 = (test: nodeunit.Test) => {
 
 export const exp5 = (test: nodeunit.Test) => {
   (async function body() {
-    console.log(await wordExpressionParser.parse('word3', {}));
+    console.log(await wordExpressionParser.parse('wordx', {}));
     test.ok(false, 'should throw');
   })().catch((err)=>{
     test.ok(true, 'caught error');
@@ -47,9 +48,15 @@ export const exp5 = (test: nodeunit.Test) => {
 
 export const exp6 = (test: nodeunit.Test) => {
   (async function body() {
-    console.log(await wordExpressionParser.parse('word4 + word2', {}));
+    console.log(await wordExpressionParser.parse('wordx + word2', {}));
     test.ok(false, 'should throw');
   })().catch((err)=>{
     test.ok(true, 'caught error');
   }).then(test.done);
+}
+
+export const exp7 = (test: nodeunit.Test) => {
+  (async function body() {
+    test.deepEqual(await wordExpressionParser.parse('word1+word2-word3', {}), [0,0,0]);
+  })().catch(test.ifError).then(test.done);
 }

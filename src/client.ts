@@ -45,7 +45,7 @@ import * as yargs from "yargs";
     }))
   }
   else {
-    console.log(_.map(await client.knnQuery(argv.k, word), (r) => {
+    console.log(_.map(await client.knnQueryOnExpression(argv.k, word), (r) => {
       return {
         word: r.word, 
         dist: r.dist
