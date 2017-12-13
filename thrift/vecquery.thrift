@@ -16,6 +16,14 @@ service WordvecQueryService {
   WordEntryList knnQuery(1: required i32 k,            // k as in k-NN
                          2: required string word)      // word to query about
       throws (1: VecQueryException err);
+
+  WordEntryList knnQueryOnVector(1: required i32 k,            // k as in k-NN
+                         2: required list<double> vector)      // word to query about
+      throws (1: VecQueryException err);
+
+  WordEntryList knnQueryOnExpression(1: required i32 k,            // k as in k-NN
+                         2: required string expression)      // expression to calculate
+      throws (1: VecQueryException err);
   
   WordEntry findVec(1: required string word)
       throws (1: VecQueryException err);

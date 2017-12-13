@@ -41,3 +41,12 @@ To query the server via command line:
 To query the server from whatever language you prefer, the protocol is defined in file ./thrift/vecquery.thrift.  Use Apache thrift
 to compile the protocol into the language choice you prefer.
 
+## Devlopment
+
+The full build command is
+
+    # fish
+    npm run peg;npm run compile-thrift;npm run compile;npm run test
+
+    # bash
+    npm run peg && npm run compile-thrift && npm run compile && npm run test

@@ -5,18 +5,22 @@
     "main": "index.js",
     "scripts": {
         "test": "nodeunit test/",
+        "peg": "pegjs --plugin ./node_modules/ts-pegjs/src/tspegjs.js -o src/wordExpression/wordExpression.ts src/wordExpression/wordExpression.pegjs",
+        "compile": "tsc",
+        "compile-thrift": "thrift-typescript --outDir thrift/ vecquery.thrift",
+
+        "build-docker": "docker build -t mhzed/wordvec_query .",
         "server-nms": "ts-node src/server.ts -p 9999 --nms localhost:10000 --data ../extern/glove.6B",
         "thriftserver": "ts-node src/server.ts -p 9999 -a glove.6B.300d.txt.300.angular.50.annoy --data ../extern/glove.6B/",
         "thriftclient": "ts-node src/client.ts --server localhost:9999",
-        "httpserver": "ts-node src/server.ts -p 9999 -a 50.annoy --data ../extern/glove.6B/ -e -x localhost:9300",
+        "httpserver": "ts-node src/server.ts -p 9999 -a --data ../extern/glove.6B/ -e -x localhost:9300",
         "httpclient": "ts-node src/client.ts --server http://localhost:9999/thrift",
         "index": "node src/index.js -la -t 50",
         "server": "node src/server.js -e -a",
-        "client": "node src/client.js",
-        "build-docker": "docker build -t mhzed/wordvec_query ."
+        "client": "node src/client.js"
     },
     "keywords": [],
-    "author": "",
+    "author": "mhzedd@gmail.com",
     "license": "ISC",
     "devDependencies": {
         "@creditkarma/thrift-typescript": "0.0.15",
@@ -24,12 +28,14 @@
         "@types/lodash": "^4.14.80",
         "@types/node": "^8.0.47",
         "@types/nodeunit": "0.0.30",
+        "@types/pegjs": "^0.10.0",
         "@types/thrift": "^0.10.4",
         "@types/yargs": "^8.0.2",
         "fs.extra": "^1.3.2",
         "nodeunit": "^0.11.2",
         "phuture": "^1.0.7",
         "ts-node": "^3.3.0",
+        "ts-pegjs": "^0.1.12",
         "typescript": "^2.5.3"
     },
     "dependencies": {
@@ -42,6 +48,8 @@
         "leveldown": "^2.0.0",
         "levelup": "^2.0.0",
         "lodash": "^4.17.4",
+        "numjs": "^0.15.1",
+        "pegjs": "^0.10.0",
         "pmfy": "^1.0.3",
         "thrift": "^0.10.0",
         "yargs": "^10.0.3"

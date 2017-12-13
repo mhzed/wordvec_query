@@ -1,10 +1,31 @@
 import {WordvecQueryService, WordEntry} from "../thrift/vecquery";
 import {VecDb} from "./VecDb";
+import * as _ from "lodash"
+// import { wordExpressionParser } from "./wordExpression"
 
 /**
  * Wrapper around thrift server, implements protocol
  */
+const typeConvert = (vecs): WordEntry[] => {
+  return _.map(vecs, (v: any) => {
+    return new WordEntry({
+      dist: v.dist,
+      word: v.word,
+      vector: v.vector
+    })
+  })
+}
 export class WordvecQueryServiceHandler implements WordvecQueryService.IHandler<void> {
+  
+  async knnQueryOnExpression(k: number, expression: string, context?: void): Promise<WordEntry[]> {
+    // wordExpressionParser(expression)
+    return []
+  }
+  
+  async knnQueryOnVector(k: number, vector: number[], context?: void): Promise<WordEntry[]> {
+    return typeConvert(await this.vecDb.findNearestVectorsOnVector(vector, k))
+  }
+
   private vecDb : VecDb;
   
   constructor(vecDb: VecDb) {
@@ -21,15 +42,6 @@ export class WordvecQueryServiceHandler implements WordvecQueryService.IHandler<
   }
 
   async knnQuery(k: number, word: string) : Promise<WordEntry[]> {
-    const vecs = await this.vecDb.findNearestVectors(word, k);
-    let ret: WordEntry[] = [];
-    for (let i = 0; i < vecs.length; i++) {
-      ret.push(new WordEntry({
-        dist: vecs[i].dist,
-        word: vecs[i].word,
-        vector: vecs[i].vector
-      }));
-    }
-    return ret;
+    return typeConvert(await this.vecDb.findNearestVectors(word, k))
   }
 }

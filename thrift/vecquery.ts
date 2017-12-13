@@ -260,6 +260,182 @@ export namespace WordvecQueryService {
             return;
         }
     }
+    export interface IKnnQueryOnVectorArgsArgs {
+        k: number;
+        vector: Array<number>;
+    }
+    export class KnnQueryOnVectorArgs implements thrift.TStructLike {
+        public k: number;
+        public vector: Array<number>;
+        constructor(args?: IKnnQueryOnVectorArgsArgs) {
+            if (args != null) {
+                if (args.k != null) {
+                    this.k = args.k;
+                }
+                else {
+                    throw new thrift.Thrift.TProtocolException(thrift.Thrift.TProtocolExceptionType.UNKNOWN, "Required field k is unset!");
+                }
+                if (args.vector != null) {
+                    this.vector = args.vector;
+                }
+                else {
+                    throw new thrift.Thrift.TProtocolException(thrift.Thrift.TProtocolExceptionType.UNKNOWN, "Required field vector is unset!");
+                }
+            }
+        }
+        public write(output: thrift.TProtocol): void {
+            output.writeStructBegin("KnnQueryOnVectorArgs");
+            if (this.k != null) {
+                output.writeFieldBegin("k", thrift.Thrift.Type.I32, 1);
+                output.writeI32(this.k);
+                output.writeFieldEnd();
+            }
+            if (this.vector != null) {
+                output.writeFieldBegin("vector", thrift.Thrift.Type.LIST, 2);
+                output.writeListBegin(thrift.Thrift.Type.DOUBLE, this.vector.length);
+                this.vector.forEach((value_9: number): void => {
+                    output.writeDouble(value_9);
+                });
+                output.writeListEnd();
+                output.writeFieldEnd();
+            }
+            output.writeFieldStop();
+            output.writeStructEnd();
+            return;
+        }
+        public read(input: thrift.TProtocol): void {
+            input.readStructBegin();
+            while (true) {
+                const ret: {
+                    fname: string;
+                    ftype: thrift.Thrift.Type;
+                    fid: number;
+                } = input.readFieldBegin();
+                const ftype: thrift.Thrift.Type = ret.ftype;
+                const fid: number = ret.fid;
+                if (ftype === thrift.Thrift.Type.STOP) {
+                    break;
+                }
+                switch (fid) {
+                    case 1:
+                        if (ftype === thrift.Thrift.Type.I32) {
+                            const value_10: number = input.readI32();
+                            this.k = value_10;
+                        }
+                        else {
+                            input.skip(ftype);
+                        }
+                        break;
+                    case 2:
+                        if (ftype === thrift.Thrift.Type.LIST) {
+                            const value_11: Array<number> = new Array<number>();
+                            const metadata_2: {
+                                etype: thrift.Thrift.Type;
+                                size: number;
+                            } = input.readListBegin();
+                            const size_2: number = metadata_2.size;
+                            for (let i_2: number = 0; i_2 < size_2; i_2++) {
+                                const value_12: number = input.readDouble();
+                                value_11.push(value_12);
+                            }
+                            input.readListEnd();
+                            this.vector = value_11;
+                        }
+                        else {
+                            input.skip(ftype);
+                        }
+                        break;
+                    default: {
+                        input.skip(ftype);
+                    }
+                }
+                input.readFieldEnd();
+            }
+            input.readStructEnd();
+            return;
+        }
+    }
+    export interface IKnnQueryOnExpressionArgsArgs {
+        k: number;
+        expression: string;
+    }
+    export class KnnQueryOnExpressionArgs implements thrift.TStructLike {
+        public k: number;
+        public expression: string;
+        constructor(args?: IKnnQueryOnExpressionArgsArgs) {
+            if (args != null) {
+                if (args.k != null) {
+                    this.k = args.k;
+                }
+                else {
+                    throw new thrift.Thrift.TProtocolException(thrift.Thrift.TProtocolExceptionType.UNKNOWN, "Required field k is unset!");
+                }
+                if (args.expression != null) {
+                    this.expression = args.expression;
+                }
+                else {
+                    throw new thrift.Thrift.TProtocolException(thrift.Thrift.TProtocolExceptionType.UNKNOWN, "Required field expression is unset!");
+                }
+            }
+        }
+        public write(output: thrift.TProtocol): void {
+            output.writeStructBegin("KnnQueryOnExpressionArgs");
+            if (this.k != null) {
+                output.writeFieldBegin("k", thrift.Thrift.Type.I32, 1);
+                output.writeI32(this.k);
+                output.writeFieldEnd();
+            }
+            if (this.expression != null) {
+                output.writeFieldBegin("expression", thrift.Thrift.Type.STRING, 2);
+                output.writeString(this.expression);
+                output.writeFieldEnd();
+            }
+            output.writeFieldStop();
+            output.writeStructEnd();
+            return;
+        }
+        public read(input: thrift.TProtocol): void {
+            input.readStructBegin();
+            while (true) {
+                const ret: {
+                    fname: string;
+                    ftype: thrift.Thrift.Type;
+                    fid: number;
+                } = input.readFieldBegin();
+                const ftype: thrift.Thrift.Type = ret.ftype;
+                const fid: number = ret.fid;
+                if (ftype === thrift.Thrift.Type.STOP) {
+                    break;
+                }
+                switch (fid) {
+                    case 1:
+                        if (ftype === thrift.Thrift.Type.I32) {
+                            const value_13: number = input.readI32();
+                            this.k = value_13;
+                        }
+                        else {
+                            input.skip(ftype);
+                        }
+                        break;
+                    case 2:
+                        if (ftype === thrift.Thrift.Type.STRING) {
+                            const value_14: string = input.readString();
+                            this.expression = value_14;
+                        }
+                        else {
+                            input.skip(ftype);
+                        }
+                        break;
+                    default: {
+                        input.skip(ftype);
+                    }
+                }
+                input.readFieldEnd();
+            }
+            input.readStructEnd();
+            return;
+        }
+    }
     export interface IFindVecArgsArgs {
         word: string;
     }
@@ -302,8 +478,8 @@ export namespace WordvecQueryService {
                 switch (fid) {
                     case 1:
                         if (ftype === thrift.Thrift.Type.STRING) {
-                            const value_9: string = input.readString();
-                            this.word = value_9;
+                            const value_15: string = input.readString();
+                            this.word = value_15;
                         }
                         else {
                             input.skip(ftype);
@@ -341,8 +517,8 @@ export namespace WordvecQueryService {
             if (this.success != null) {
                 output.writeFieldBegin("success", thrift.Thrift.Type.LIST, 0);
                 output.writeListBegin(thrift.Thrift.Type.STRUCT, this.success.length);
-                this.success.forEach((value_10: WordEntry): void => {
-                    value_10.write(output);
+                this.success.forEach((value_16: WordEntry): void => {
+                    value_16.write(output);
                 });
                 output.writeListEnd();
                 output.writeFieldEnd();
@@ -372,19 +548,19 @@ export namespace WordvecQueryService {
                 switch (fid) {
                     case 0:
                         if (ftype === thrift.Thrift.Type.LIST) {
-                            const value_11: Array<WordEntry> = new Array<WordEntry>();
-                            const metadata_2: {
+                            const value_17: Array<WordEntry> = new Array<WordEntry>();
+                            const metadata_3: {
                                 etype: thrift.Thrift.Type;
                                 size: number;
                             } = input.readListBegin();
-                            const size_2: number = metadata_2.size;
-                            for (let i_2: number = 0; i_2 < size_2; i_2++) {
-                                const value_12: WordEntry = new WordEntry();
-                                value_12.read(input);
-                                value_11.push(value_12);
+                            const size_3: number = metadata_3.size;
+                            for (let i_3: number = 0; i_3 < size_3; i_3++) {
+                                const value_18: WordEntry = new WordEntry();
+                                value_18.read(input);
+                                value_17.push(value_18);
                             }
                             input.readListEnd();
-                            this.success = value_11;
+                            this.success = value_17;
                         }
                         else {
                             input.skip(ftype);
@@ -392,9 +568,191 @@ export namespace WordvecQueryService {
                         break;
                     case 1:
                         if (ftype === thrift.Thrift.Type.STRUCT) {
-                            const value_13: VecQueryException = new VecQueryException();
-                            value_13.read(input);
-                            this.err = value_13;
+                            const value_19: VecQueryException = new VecQueryException();
+                            value_19.read(input);
+                            this.err = value_19;
+                        }
+                        else {
+                            input.skip(ftype);
+                        }
+                        break;
+                    default: {
+                        input.skip(ftype);
+                    }
+                }
+                input.readFieldEnd();
+            }
+            input.readStructEnd();
+            return;
+        }
+    }
+    export interface IKnnQueryOnVectorResultArgs {
+        success?: Array<WordEntry>;
+        err?: VecQueryException;
+    }
+    export class KnnQueryOnVectorResult implements thrift.TStructLike {
+        public success: Array<WordEntry>;
+        public err: VecQueryException;
+        constructor(args?: IKnnQueryOnVectorResultArgs) {
+            if (args != null) {
+                if (args.success != null) {
+                    this.success = args.success;
+                }
+                if (args.err != null) {
+                    this.err = args.err;
+                }
+            }
+        }
+        public write(output: thrift.TProtocol): void {
+            output.writeStructBegin("KnnQueryOnVectorResult");
+            if (this.success != null) {
+                output.writeFieldBegin("success", thrift.Thrift.Type.LIST, 0);
+                output.writeListBegin(thrift.Thrift.Type.STRUCT, this.success.length);
+                this.success.forEach((value_20: WordEntry): void => {
+                    value_20.write(output);
+                });
+                output.writeListEnd();
+                output.writeFieldEnd();
+            }
+            if (this.err != null) {
+                output.writeFieldBegin("err", thrift.Thrift.Type.STRUCT, 1);
+                this.err.write(output);
+                output.writeFieldEnd();
+            }
+            output.writeFieldStop();
+            output.writeStructEnd();
+            return;
+        }
+        public read(input: thrift.TProtocol): void {
+            input.readStructBegin();
+            while (true) {
+                const ret: {
+                    fname: string;
+                    ftype: thrift.Thrift.Type;
+                    fid: number;
+                } = input.readFieldBegin();
+                const ftype: thrift.Thrift.Type = ret.ftype;
+                const fid: number = ret.fid;
+                if (ftype === thrift.Thrift.Type.STOP) {
+                    break;
+                }
+                switch (fid) {
+                    case 0:
+                        if (ftype === thrift.Thrift.Type.LIST) {
+                            const value_21: Array<WordEntry> = new Array<WordEntry>();
+                            const metadata_4: {
+                                etype: thrift.Thrift.Type;
+                                size: number;
+                            } = input.readListBegin();
+                            const size_4: number = metadata_4.size;
+                            for (let i_4: number = 0; i_4 < size_4; i_4++) {
+                                const value_22: WordEntry = new WordEntry();
+                                value_22.read(input);
+                                value_21.push(value_22);
+                            }
+                            input.readListEnd();
+                            this.success = value_21;
+                        }
+                        else {
+                            input.skip(ftype);
+                        }
+                        break;
+                    case 1:
+                        if (ftype === thrift.Thrift.Type.STRUCT) {
+                            const value_23: VecQueryException = new VecQueryException();
+                            value_23.read(input);
+                            this.err = value_23;
+                        }
+                        else {
+                            input.skip(ftype);
+                        }
+                        break;
+                    default: {
+                        input.skip(ftype);
+                    }
+                }
+                input.readFieldEnd();
+            }
+            input.readStructEnd();
+            return;
+        }
+    }
+    export interface IKnnQueryOnExpressionResultArgs {
+        success?: Array<WordEntry>;
+        err?: VecQueryException;
+    }
+    export class KnnQueryOnExpressionResult implements thrift.TStructLike {
+        public success: Array<WordEntry>;
+        public err: VecQueryException;
+        constructor(args?: IKnnQueryOnExpressionResultArgs) {
+            if (args != null) {
+                if (args.success != null) {
+                    this.success = args.success;
+                }
+                if (args.err != null) {
+                    this.err = args.err;
+                }
+            }
+        }
+        public write(output: thrift.TProtocol): void {
+            output.writeStructBegin("KnnQueryOnExpressionResult");
+            if (this.success != null) {
+                output.writeFieldBegin("success", thrift.Thrift.Type.LIST, 0);
+                output.writeListBegin(thrift.Thrift.Type.STRUCT, this.success.length);
+                this.success.forEach((value_24: WordEntry): void => {
+                    value_24.write(output);
+                });
+                output.writeListEnd();
+                output.writeFieldEnd();
+            }
+            if (this.err != null) {
+                output.writeFieldBegin("err", thrift.Thrift.Type.STRUCT, 1);
+                this.err.write(output);
+                output.writeFieldEnd();
+            }
+            output.writeFieldStop();
+            output.writeStructEnd();
+            return;
+        }
+        public read(input: thrift.TProtocol): void {
+            input.readStructBegin();
+            while (true) {
+                const ret: {
+                    fname: string;
+                    ftype: thrift.Thrift.Type;
+                    fid: number;
+                } = input.readFieldBegin();
+                const ftype: thrift.Thrift.Type = ret.ftype;
+                const fid: number = ret.fid;
+                if (ftype === thrift.Thrift.Type.STOP) {
+                    break;
+                }
+                switch (fid) {
+                    case 0:
+                        if (ftype === thrift.Thrift.Type.LIST) {
+                            const value_25: Array<WordEntry> = new Array<WordEntry>();
+                            const metadata_5: {
+                                etype: thrift.Thrift.Type;
+                                size: number;
+                            } = input.readListBegin();
+                            const size_5: number = metadata_5.size;
+                            for (let i_5: number = 0; i_5 < size_5; i_5++) {
+                                const value_26: WordEntry = new WordEntry();
+                                value_26.read(input);
+                                value_25.push(value_26);
+                            }
+                            input.readListEnd();
+                            this.success = value_25;
+                        }
+                        else {
+                            input.skip(ftype);
+                        }
+                        break;
+                    case 1:
+                        if (ftype === thrift.Thrift.Type.STRUCT) {
+                            const value_27: VecQueryException = new VecQueryException();
+                            value_27.read(input);
+                            this.err = value_27;
                         }
                         else {
                             input.skip(ftype);
@@ -459,9 +817,9 @@ export namespace WordvecQueryService {
                 switch (fid) {
                     case 0:
                         if (ftype === thrift.Thrift.Type.STRUCT) {
-                            const value_14: WordEntry = new WordEntry();
-                            value_14.read(input);
-                            this.success = value_14;
+                            const value_28: WordEntry = new WordEntry();
+                            value_28.read(input);
+                            this.success = value_28;
                         }
                         else {
                             input.skip(ftype);
@@ -469,9 +827,9 @@ export namespace WordvecQueryService {
                         break;
                     case 1:
                         if (ftype === thrift.Thrift.Type.STRUCT) {
-                            const value_15: VecQueryException = new VecQueryException();
-                            value_15.read(input);
-                            this.err = value_15;
+                            const value_29: VecQueryException = new VecQueryException();
+                            value_29.read(input);
+                            this.err = value_29;
                         }
                         else {
                             input.skip(ftype);
@@ -518,6 +876,36 @@ export namespace WordvecQueryService {
                 this.send_knnQuery(k, word, requestId);
             });
         }
+        public knnQueryOnVector(k: number, vector: Array<number>): Promise<Array<WordEntry>> {
+            const requestId: number = this.incrementSeqId();
+            return new Promise<Array<WordEntry>>((resolve, reject): void => {
+                this._reqs[requestId] = (error, result) => {
+                    delete this._reqs[requestId];
+                    if (error != null) {
+                        reject(error);
+                    }
+                    else {
+                        resolve(result);
+                    }
+                };
+                this.send_knnQueryOnVector(k, vector, requestId);
+            });
+        }
+        public knnQueryOnExpression(k: number, expression: string): Promise<Array<WordEntry>> {
+            const requestId: number = this.incrementSeqId();
+            return new Promise<Array<WordEntry>>((resolve, reject): void => {
+                this._reqs[requestId] = (error, result) => {
+                    delete this._reqs[requestId];
+                    if (error != null) {
+                        reject(error);
+                    }
+                    else {
+                        resolve(result);
+                    }
+                };
+                this.send_knnQueryOnExpression(k, expression, requestId);
+            });
+        }
         public findVec(word: string): Promise<WordEntry> {
             const requestId: number = this.incrementSeqId();
             return new Promise<WordEntry>((resolve, reject): void => {
@@ -537,6 +925,22 @@ export namespace WordvecQueryService {
             const output: thrift.TProtocol = new this.protocol(this.output);
             output.writeMessageBegin("knnQuery", thrift.Thrift.MessageType.CALL, requestId);
             const args: KnnQueryArgs = new KnnQueryArgs({ k, word });
+            args.write(output);
+            output.writeMessageEnd();
+            return this.output.flush();
+        }
+        public send_knnQueryOnVector(k: number, vector: Array<number>, requestId: number): void {
+            const output: thrift.TProtocol = new this.protocol(this.output);
+            output.writeMessageBegin("knnQueryOnVector", thrift.Thrift.MessageType.CALL, requestId);
+            const args: KnnQueryOnVectorArgs = new KnnQueryOnVectorArgs({ k, vector });
+            args.write(output);
+            output.writeMessageEnd();
+            return this.output.flush();
+        }
+        public send_knnQueryOnExpression(k: number, expression: string, requestId: number): void {
+            const output: thrift.TProtocol = new this.protocol(this.output);
+            output.writeMessageBegin("knnQueryOnExpression", thrift.Thrift.MessageType.CALL, requestId);
+            const args: KnnQueryOnExpressionArgs = new KnnQueryOnExpressionArgs({ k, expression });
             args.write(output);
             output.writeMessageEnd();
             return this.output.flush();
@@ -571,6 +975,50 @@ export namespace WordvecQueryService {
                 return callback(new thrift.Thrift.TApplicationException(thrift.Thrift.TApplicationExceptionType.UNKNOWN, "knnQuery failed: unknown result"));
             }
         }
+        public recv_knnQueryOnVector(input: thrift.TProtocol, mtype: thrift.Thrift.MessageType, rseqid: number): void {
+            const noop = (): any => null;
+            const callback = this._reqs[rseqid] || noop;
+            if (mtype === thrift.Thrift.MessageType.EXCEPTION) {
+                const x: thrift.Thrift.TApplicationException = new thrift.Thrift.TApplicationException();
+                x.read(input);
+                input.readMessageEnd();
+                return callback(x);
+            }
+            const result: KnnQueryOnVectorResult = new KnnQueryOnVectorResult();
+            result.read(input);
+            input.readMessageEnd();
+            if (result.err != null) {
+                return callback(result.err);
+            }
+            if (result.success != null) {
+                return callback(undefined, result.success);
+            }
+            else {
+                return callback(new thrift.Thrift.TApplicationException(thrift.Thrift.TApplicationExceptionType.UNKNOWN, "knnQueryOnVector failed: unknown result"));
+            }
+        }
+        public recv_knnQueryOnExpression(input: thrift.TProtocol, mtype: thrift.Thrift.MessageType, rseqid: number): void {
+            const noop = (): any => null;
+            const callback = this._reqs[rseqid] || noop;
+            if (mtype === thrift.Thrift.MessageType.EXCEPTION) {
+                const x: thrift.Thrift.TApplicationException = new thrift.Thrift.TApplicationException();
+                x.read(input);
+                input.readMessageEnd();
+                return callback(x);
+            }
+            const result: KnnQueryOnExpressionResult = new KnnQueryOnExpressionResult();
+            result.read(input);
+            input.readMessageEnd();
+            if (result.err != null) {
+                return callback(result.err);
+            }
+            if (result.success != null) {
+                return callback(undefined, result.success);
+            }
+            else {
+                return callback(new thrift.Thrift.TApplicationException(thrift.Thrift.TApplicationExceptionType.UNKNOWN, "knnQueryOnExpression failed: unknown result"));
+            }
+        }
         public recv_findVec(input: thrift.TProtocol, mtype: thrift.Thrift.MessageType, rseqid: number): void {
             const noop = (): any => null;
             const callback = this._reqs[rseqid] || noop;
@@ -596,6 +1044,8 @@ export namespace WordvecQueryService {
     }
     export interface IHandler<Context> {
         knnQuery: (k: number, word: string, context?: Context) => Array<WordEntry> | Promise<Array<WordEntry>>;
+        knnQueryOnVector: (k: number, vector: Array<number>, context?: Context) => Array<WordEntry> | Promise<Array<WordEntry>>;
+        knnQueryOnExpression: (k: number, expression: string, context?: Context) => Array<WordEntry> | Promise<Array<WordEntry>>;
         findVec: (word: string, context?: Context) => WordEntry | Promise<WordEntry>;
     }
     export class Processor<Context> {
@@ -615,6 +1065,12 @@ export namespace WordvecQueryService {
             switch (methodName) {
                 case "process_knnQuery": {
                     return this.process_knnQuery(rseqid, input, output, context);
+                }
+                case "process_knnQueryOnVector": {
+                    return this.process_knnQueryOnVector(rseqid, input, output, context);
+                }
+                case "process_knnQueryOnExpression": {
+                    return this.process_knnQueryOnExpression(rseqid, input, output, context);
                 }
                 case "process_findVec": {
                     return this.process_findVec(rseqid, input, output, context);
@@ -660,6 +1116,78 @@ export namespace WordvecQueryService {
                 else {
                     const result: thrift.Thrift.TApplicationException = new thrift.Thrift.TApplicationException(thrift.Thrift.TApplicationExceptionType.UNKNOWN, err.message);
                     output.writeMessageBegin("knnQuery", thrift.Thrift.MessageType.EXCEPTION, seqid);
+                    result.write(output);
+                    output.writeMessageEnd();
+                    output.flush();
+                    return;
+                }
+            });
+        }
+        public process_knnQueryOnVector(seqid: number, input: thrift.TProtocol, output: thrift.TProtocol, context?: Context): void {
+            const args = new KnnQueryOnVectorArgs();
+            args.read(input);
+            input.readMessageEnd();
+            new Promise<Array<WordEntry>>((resolve, reject): void => {
+                try {
+                    resolve(this._handler.knnQueryOnVector(args.k, args.vector, context));
+                }
+                catch (err) {
+                    reject(err);
+                }
+            }).then((data: Array<WordEntry>): void => {
+                const result: KnnQueryOnVectorResult = new KnnQueryOnVectorResult({ success: data });
+                output.writeMessageBegin("knnQueryOnVector", thrift.Thrift.MessageType.REPLY, seqid);
+                result.write(output);
+                output.writeMessageEnd();
+                output.flush();
+            }).catch((err: Error): void => {
+                if (err instanceof VecQueryException) {
+                    const result: KnnQueryOnVectorResult = new KnnQueryOnVectorResult({ err: err });
+                    output.writeMessageBegin("knnQueryOnVector", thrift.Thrift.MessageType.REPLY, seqid);
+                    result.write(output);
+                    output.writeMessageEnd();
+                    output.flush();
+                    return;
+                }
+                else {
+                    const result: thrift.Thrift.TApplicationException = new thrift.Thrift.TApplicationException(thrift.Thrift.TApplicationExceptionType.UNKNOWN, err.message);
+                    output.writeMessageBegin("knnQueryOnVector", thrift.Thrift.MessageType.EXCEPTION, seqid);
+                    result.write(output);
+                    output.writeMessageEnd();
+                    output.flush();
+                    return;
+                }
+            });
+        }
+        public process_knnQueryOnExpression(seqid: number, input: thrift.TProtocol, output: thrift.TProtocol, context?: Context): void {
+            const args = new KnnQueryOnExpressionArgs();
+            args.read(input);
+            input.readMessageEnd();
+            new Promise<Array<WordEntry>>((resolve, reject): void => {
+                try {
+                    resolve(this._handler.knnQueryOnExpression(args.k, args.expression, context));
+                }
+                catch (err) {
+                    reject(err);
+                }
+            }).then((data: Array<WordEntry>): void => {
+                const result: KnnQueryOnExpressionResult = new KnnQueryOnExpressionResult({ success: data });
+                output.writeMessageBegin("knnQueryOnExpression", thrift.Thrift.MessageType.REPLY, seqid);
+                result.write(output);
+                output.writeMessageEnd();
+                output.flush();
+            }).catch((err: Error): void => {
+                if (err instanceof VecQueryException) {
+                    const result: KnnQueryOnExpressionResult = new KnnQueryOnExpressionResult({ err: err });
+                    output.writeMessageBegin("knnQueryOnExpression", thrift.Thrift.MessageType.REPLY, seqid);
+                    result.write(output);
+                    output.writeMessageEnd();
+                    output.flush();
+                    return;
+                }
+                else {
+                    const result: thrift.Thrift.TApplicationException = new thrift.Thrift.TApplicationException(thrift.Thrift.TApplicationExceptionType.UNKNOWN, err.message);
+                    output.writeMessageBegin("knnQueryOnExpression", thrift.Thrift.MessageType.EXCEPTION, seqid);
                     result.write(output);
                     output.writeMessageEnd();
                     output.flush();

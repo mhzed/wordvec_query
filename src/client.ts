@@ -1,6 +1,7 @@
 
 import * as _ from 'lodash';
 import {WordvecQueryServiceFactory} from "./WordvecQueryServiceFactory";
+import {WordvecQueryService} from "../thrift/vecquery";
 import * as yargs from "yargs";
 
 (async function main() {
@@ -18,7 +19,7 @@ import * as yargs from "yargs";
       .demandCommand(1);
   const argv = args.argv;
 
-  let client;
+  let client: WordvecQueryService.Client;
   if (_.includes(argv.server, '://')) {
     client = WordvecQueryServiceFactory.createHttpClient(argv.server);
   } else {
@@ -27,10 +28,30 @@ import * as yargs from "yargs";
   }
   let word = argv._[0];
   
-  //console.log(await client.findVec(word));
-  let res = await client.knnQuery(argv.k, word);
-  console.log(res);
-  
+  if (/,/.test(word)) {
+    let words = word.split(',');
+    let vecs = await Promise.all(_.map(words, (w) => client.findVec(w)))
+    let average: number[] = []
+    _.times(vecs[0].vector.length, (i)=>{
+      let sum = 0;
+      for (let v of vecs) { sum += v.vector[i] }
+      average.push(sum/vecs.length);
+    })
+    console.log(_.map(await client.knnQueryOnVector(argv.k, average), (r) => {
+      return {
+        word: r.word, 
+        dist: r.dist
+      }
+    }))
+  }
+  else {
+    console.log(_.map(await client.knnQuery(argv.k, word), (r) => {
+      return {
+        word: r.word, 
+        dist: r.dist
+      }
+    }))
+  }
 })().catch((err)=>{
   console.error(err);
   process.exit(1);

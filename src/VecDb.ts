@@ -79,6 +79,10 @@ export class VecDb {
    */
   async findNearestVectors(word: string, k: number) : Promise<Array<VecEntry>>{
     const vec : number[] = await this.findVec(word);
+    return this.findNearestVectorsOnVector(vec, k);
+  }
+
+  async findNearestVectorsOnVector(vec: number[], k: number) : Promise<Array<VecEntry>>{
     const neighborVecs : VecNeighborEntry[] = await this.neighbor.knn(vec, k);
     const neighborWords : string[] = await Promise.all(_.map(neighborVecs, (v) => this.findWord(v.id)));
     const neighborWordvecs = await Promise.all(_.map(neighborWords, (w) => this.findVec(w)));
@@ -92,7 +96,7 @@ export class VecDb {
     }
     return result;
   }
-  
+
   async close() : Promise<void> {
     await this.keyValDb.close();
   }
