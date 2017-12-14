@@ -11,6 +11,7 @@
   type Result = Promise<number[] | number>;
 
   const evalWord = async(word: string): Result => { 
+
     if (/^[0-9\.]+$/.test(word)) return parseFloat(word);
     else return instance.findVec(word);
   }
@@ -60,9 +61,9 @@ Factor
  / Word
 
 Word "word"
- = [a-zA-Z0-9]+ { return evalWord(text()); }
+ = [a-zA-Z\.0-9]+ { return evalWord(text()); }
  
 _ "whitespace"
- = [ \\t\\n\\r]*
+ = [ \t\n\r]*
 
 

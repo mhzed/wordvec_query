@@ -8,7 +8,6 @@
         "peg": "pegjs --plugin ./node_modules/ts-pegjs/src/tspegjs.js -o src/wordExpression/wordExpression.ts src/wordExpression/wordExpression.pegjs",
         "compile": "tsc",
         "compile-thrift": "thrift-typescript --outDir thrift/ vecquery.thrift",
-
         "build-docker": "docker build -t mhzed/wordvec_query .",
         "server-nms": "ts-node src/server.ts -p 9999 --nms localhost:10000 --data ../extern/glove.6B",
         "thriftserver": "ts-node src/server.ts -p 9999 -a glove.6B.300d.txt.300.angular.50.annoy --data ../extern/glove.6B/",

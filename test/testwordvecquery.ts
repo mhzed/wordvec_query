@@ -16,7 +16,7 @@ exports.createdb = (test: nodeunit.Test) => {
   (async function body() {
     await fse.remove(dbPath);
     const db  = new VecDb(levelup(leveldown(dbPath)), null);
-    await db.ingestDb(fs.createReadStream(testDataFile));
+    await db.ingestDb(fs.createReadStream(testDataFile), ()=>{}, ()=>{});
     await db.close();
   })().catch(test.ifError).then(test.done);
 }

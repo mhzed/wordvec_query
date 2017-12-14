@@ -10,6 +10,9 @@ instance.findVec = async (word: string): Promise<number[]> => {
     case 'word1': return [1,1,1];
     case 'word2': return [2,2,2];
     case 'word3': return [3,3,3];
+    case 'food':  return [4,4,4];
+    case 'root': return [5,5,5];
+    case 'coffee': return [6,6,6]
     default: throw new Error(word + " is not found");
   }  
 }
@@ -58,5 +61,11 @@ export const exp6 = (test: nodeunit.Test) => {
 export const exp7 = (test: nodeunit.Test) => {
   (async function body() {
     test.deepEqual(await wordExpressionParser.parse('word1+word2-word3', {}), [0,0,0]);
+  })().catch(test.ifError).then(test.done);
+}
+
+export const exp8 = (test: nodeunit.Test) => {
+  (async function body() {
+    test.deepEqual(await wordExpressionParser.parse('food-root+coffee', {}), [5,5,5]);
   })().catch(test.ifError).then(test.done);
 }

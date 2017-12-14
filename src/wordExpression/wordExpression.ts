@@ -170,12 +170,12 @@ function peg$parse(input, options) {
   const peg$c13 = peg$literalExpectation(")", false);
   const peg$c14 = function(expr) { return expr; };
   const peg$c15 = peg$otherExpectation("word");
-  const peg$c16 = /^[a-zA-Z0-9]/;
-  const peg$c17 = peg$classExpectation([["a", "z"], ["A", "Z"], ["0", "9"]], false, false);
+  const peg$c16 = /^[a-zA-Z.0-9]/;
+  const peg$c17 = peg$classExpectation([["a", "z"], ["A", "Z"], ".", ["0", "9"]], false, false);
   const peg$c18 = function() { return evalWord(text()); };
   const peg$c19 = peg$otherExpectation("whitespace");
-  const peg$c20 = /^[ \\t\\n\\r]/;
-  const peg$c21 = peg$classExpectation([" ", "\\", "t", "\\", "n", "\\", "r"], false, false);
+  const peg$c20 = /^[ \t\n\r]/;
+  const peg$c21 = peg$classExpectation([" ", "\t", "\n", "\r"], false, false);
 
   let peg$currPos = 0;
   let peg$savedPos = 0;

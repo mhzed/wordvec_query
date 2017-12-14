@@ -20,7 +20,8 @@ export class AnnoyNeighbors implements VecNeighbors {
     ntrees: 0   // let lib decide
   };
   
-  private constructor() {
+  constructor(prop?: AnnoyIndexProperty) {
+    if (prop) this.property = _.assign(this.property, prop);
   };
   
   public saveAs(base:string) : void {
@@ -37,28 +38,16 @@ export class AnnoyNeighbors implements VecNeighbors {
     return ret;
   }
 
-  /**
-   * load vectors into memory index via default property
-   * 
-   * @param {"stream".internal.Readable} vecStream one per per vec, vec is space deliminated
-   * @returns {Promise<AnnoySimilarity>}
-   */
-  public static async buildIndexFromVector(vecStream: Readable, prop?: AnnoyIndexProperty) : Promise<AnnoyNeighbors> {
-    let ret = new AnnoyNeighbors();
-    // read vecfile
-    let i = 0;
-    ret.property = _.assign(ret.property, prop);
-    for await (const line of asyncIterateStream(byline(vecStream), false)) {
-      let vec = _.map(line.toString().split(/\s+/), (tok:string)=>tok=='.' ? 0 : parseFloat(tok));
-      if (!ret.index) {
-        ret.property.dimension = vec.length;
-        ret.index = new Annoy(ret.property.dimension, ret.property.method);
-      }
-      ret.index.addItem(i++, vec);
-    }
-    if (ret.property.ntrees) ret.index.build(ret.property.ntrees);
-    else ret.index.build();
-    return ret;
+  public createIndex(dimension: number) {
+    this.property.dimension = dimension;
+    this.index = new Annoy(this.property.dimension, this.property.method);
+  }
+  public addItemToIndex(id: number, vec: number[]) {
+    this.index.addItem(id, vec);
+  }
+  public buildIndex() {
+    if (this.property.ntrees) this.index.build(this.property.ntrees);
+    else this.index.build();
   }
 
   // load index

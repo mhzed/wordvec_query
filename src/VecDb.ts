@@ -32,6 +32,10 @@ export class VecDb {
     this.neighbor = similarityInterface;
   }
 
+  async store(word: string, wordvec: number[], id: number): Promise<void> {
+    await this.keyValDb.put(word, JSON.stringify(wordvec));
+    await this.keyValDb.put(dbkeyOfI(id), word);
+  }
   /**
    * Ingest a raw wordvec stream: 1. into leveldb, 2. call vecHook for each line processed
    * 
@@ -40,16 +44,35 @@ export class VecDb {
    * @param {(word: string, vec: number[]) => void} vecHook called for each line processed 
    * @returns {Promise<void>}
    */
-  async ingestDb(input: Readable, vecHook?: (word: string, vec: number[])=>void ) : Promise<void> {
-    let i = 0;
+  async ingestDb(input: Readable, vecHook: (word: string, vec: number[], id: number)=>void,
+    errCb: (iline: number, line: string, msg: string)=>void ) : Promise<void> {
+    let id = 0, iline=0;
+    let dimension = undefined;
     for await (const line of asyncIterateStream(byline(input), false)) {
-      let vec = line.toString().split(/\s+/);
-      let word = vec[0];
-      let wordvec : number[] = _.map(vec.slice(1), (n:string)=>{if (n=='.') return 0; else return parseFloat(n);});
-      await this.keyValDb.put(word, JSON.stringify(wordvec));
-      await this.keyValDb.put(dbkeyOfI(i), word);
-      if (vecHook) vecHook(word, wordvec);
-      i++;
+      iline++;
+      let vec = _.trim(line.toString()).split(/\s+/);
+      if (iline==1 && vec.length==2) continue;  // fasttext dump: first line is line count and dimensions, ignore
+      try {
+        let word = vec[0];
+        let wordvec : number[] = _(vec.slice(1)).map((n:string)=>{
+          if (n=='.') return 0; else return parseFloat(n);
+        }).filter((e)=>_.isFinite(e)).value();
+        if (dimension == undefined) dimension = wordvec.length;
+
+        if (word === null || word === '') {
+          errCb(iline, line, "no word")
+        } else if (wordvec.length != dimension) {
+          errCb(iline, line, "bad dimension " + wordvec.length) 
+        }
+        else {
+          await this.keyValDb.put(word, JSON.stringify(wordvec));
+          await this.keyValDb.put(dbkeyOfI(id), word);
+          if (vecHook) vecHook(word, wordvec, id);
+          id++; // id keesp track of valid lines only
+        }
+      } catch (e) {
+        throw new Error("Line " + iline + ": " + line + "\n" + (e.stack || e.toString()));
+      }
     }
   }
 
