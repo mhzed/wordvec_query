@@ -30,7 +30,7 @@ export const loadVecDbUsignAnnoy = (dataDir: string, pattern: string)
   };
 };
 
-const installXploreProxy = (app: any, hostport: string, thisport: string) : void => {
+const installProxy = (app: any, hostport: string, thisport: string) : void => {
   app.use('/', proxy(hostport, {
     parseReqBody: false,
     proxyReqPathResolver: (req)=> { // no change
@@ -53,9 +53,9 @@ const installXploreProxy = (app: any, hostport: string, thisport: string) : void
             alias: 'e',
             describe: 'listen using express as http server, default is thrift server'
           })
-          .option('proxyxplore', {
+          .option('proxy', {
             alias: 'x',
-            describe: 'setup proxy map to xplore at host:port'
+            describe: 'setup proxy to map / to http://host:port/, allows CORS'
           })
           .option ('nms', {
             describe: 'nms server host:port'
@@ -106,7 +106,7 @@ const installXploreProxy = (app: any, hostport: string, thisport: string) : void
     });
     bindToExpress(app, '/thrift', vecDb);
     if (argv.proxyxplore) {
-      installXploreProxy(app, argv.proxyxplore, argv.port);
+      installProxy(app, argv.proxyxplore, argv.port);
     }
     app.listen(parseInt(argv.port));
     console.log(`http server listening at http://localhost:${argv.port}/thrift ...`);
