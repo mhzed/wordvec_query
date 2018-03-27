@@ -5,6 +5,18 @@ Provides interface (apache thrift) for wordvec lookup and find nearest neighbors
 
 Uses leveldb for word/vector lookup.  Uses annoy for nearest vector neighbours lookup.
 
+## Setup
+
+Install https://yarnpkg.com/
+
+Then install dependencies by runing in this directory:
+
+    yarn
+
+Recommend to use Visual Studio Code as IDE, https://code.visualstudio.com
+
+Project is implented in typescript, http://www.typescriptlang.org
+
 ## index/query
 
 The input file format should be:
