@@ -27,6 +27,9 @@
   const div = async(left: Result, right: Result): Result => {
     return nj.divide(await left, await right);
   }
+  const negate = async(right: Result): Result => {
+    return nj.negative(await right);
+  }
 
   async function combine(first, rest, combiners):  Result {
     var result = first, i;
@@ -39,6 +42,12 @@
     return result;
   }
 }
+
+NegateExpression
+ = _ ("-") nexpr:Expression {
+     return negate(nexpr);
+   }
+ / Expression
 
 Expression
  = first:Term rest:(_ ("+" / "-") _ Term)* {

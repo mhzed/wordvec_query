@@ -69,3 +69,15 @@ export const exp8 = (test: nodeunit.Test) => {
     test.deepEqual(await wordExpressionParser.parse('food-root+coffee', {}), [5,5,5]);
   })().catch(test.ifError).then(test.done);
 }
+
+export const exp9 = (test: nodeunit.Test) => {
+  (async function body() {
+    test.deepEqual(await wordExpressionParser.parse('-food', {}), [-4,-4,-4]);
+  })().catch(test.ifError).then(test.done);
+}
+
+export const exp10 = (test: nodeunit.Test) => {
+  (async function body() {
+    test.deepEqual(await wordExpressionParser.parse('-(food-root+coffee)', {}), [-5,-5,-5]);
+  })().catch(test.ifError).then(test.done);
+}

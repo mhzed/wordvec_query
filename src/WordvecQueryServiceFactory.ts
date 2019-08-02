@@ -20,7 +20,7 @@ export class WordvecQueryServiceFactory {
     return thrift.createClient(WordvecQueryService, thriftConnection);
   }
 
-  static createServer(handler: WordvecQueryService.IHandler<void>) {
+  static createServer(handler: WordvecQueryService.IHandler<{}>) {
     return thrift.createServer(WordvecQueryService.Processor, handler);
   }
 

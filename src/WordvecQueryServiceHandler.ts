@@ -16,9 +16,9 @@ const typeConvert = (vecs): WordEntry[] => {
     })
   })
 }
-export class WordvecQueryServiceHandler implements WordvecQueryService.IHandler<void> {
+export class WordvecQueryServiceHandler implements WordvecQueryService.IHandler<{}> {
   
-  async knnQueryOnExpression(k: number, expression: string, context?: void): Promise<WordEntry[]> {
+  async knnQueryOnExpression(k: number, expression: string, context?: {}): Promise<WordEntry[]> {
     if (expression.length > 512) throw new Error("Too long");
     let vec = await parse(expression, {});
     if (vec.tolist) vec = vec.tolist();
@@ -26,7 +26,7 @@ export class WordvecQueryServiceHandler implements WordvecQueryService.IHandler<
     return typeConvert(words);
   }
   
-  async knnQueryOnVector(k: number, vector: number[], context?: void): Promise<WordEntry[]> {
+  async knnQueryOnVector(k: number, vector: number[], context?: {}): Promise<WordEntry[]> {
     return typeConvert(await this.vecDb.findNearestVectorsOnVector(vector, k))
   }
 
