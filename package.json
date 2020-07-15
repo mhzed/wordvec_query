@@ -47,7 +47,7 @@
         "express-http-proxy": "^1.0.7",
         "leveldown": "^2.0.0",
         "levelup": "^2.0.0",
-        "lodash": "^4.17.4",
+        "lodash": "^4.17.19",
         "numjs": "^0.15.1",
         "pegjs": "^0.10.0",
         "pmfy": "^1.0.3",
