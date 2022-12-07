@@ -43,7 +43,7 @@
         "annoy": "^1.0.10",
         "async-iterate-stream": "^1.0.2",
         "byline": "^5.0.0",
-        "express": "^4.16.2",
+        "express": "^4.17.3",
         "express-http-proxy": "^1.0.7",
         "leveldown": "^2.0.0",
         "levelup": "^2.0.0",
